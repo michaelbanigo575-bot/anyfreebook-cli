@@ -1,0 +1,51 @@
+{
+  "name": "anyfreebook-cli",
+  "version": "0.1.0",
+  "description": "Search 7 open-access book sources and download only what is verifiably public domain.",
+  "type": "module",
+  "bin": {
+    "anyfreebook": "bin/anyfreebook.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelbanigo575-bot/anyfreebook-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/michaelbanigo575-bot/anyfreebook-cli/issues"
+  },
+  "homepage": "https://github.com/michaelbanigo575-bot/anyfreebook-cli#readme",
+  "keywords": [
+    "anyfreebook",
+    "books",
+    "ebook",
+    "open-access",
+    "public-domain",
+    "project-gutenberg",
+    "open-library",
+    "internet-archive",
+    "librivox",
+    "doaj",
+    "pubmed",
+    "cli",
+    "search",
+    "download",
+    "free"
+  ],
+  "files": [
+    "bin",
+    "src",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test \"test/*.test.js\"",
+    "help": "node bin/anyfreebook.js --help"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

@@ -1,0 +1,14 @@
+# The `files` field in package.json already whitelists what ships.
+# These entries make the intent explicit.
+
+# Tests
+test/
+
+# Python SDK (published separately as `anyfreebook-api`)
+python/
+
+# CI
+.github/
+
+# Logs
+*.log

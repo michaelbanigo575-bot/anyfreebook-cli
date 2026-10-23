@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "anyfreebook-api"
+version = "0.1.0"
+description = "Python client for the ANYFREEBOOK public API: search open-access book sources and get the legal tier of every result."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Michael Banigo" }]
+keywords = [
+    "anyfreebook",
+    "books",
+    "ebook",
+    "open-access",
+    "public-domain",
+    "project-gutenberg",
+    "open-library",
+    "internet-archive",
+    "api",
+    "sdk",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://anyfreebook.com"
+Repository = "https://github.com/michaelbanigo575-bot/anyfreebook-cli"
+Issues = "https://github.com/michaelbanigo575-bot/anyfreebook-cli/issues"
+
+[tool.setuptools]
+packages = ["anyfreebook_api"]
+
+[tool.setuptools.package-data]
+anyfreebook_api = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

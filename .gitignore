@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Downloaded books (CLI default output directory)
+books/
+
+# Build output
+dist/
+
+# Python
+__pycache__/
+*.egg-info/
+.pytest_cache/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
