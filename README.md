@@ -19,13 +19,14 @@ This tool asks, per result, and tells you which one you have:
 
 | tier | meaning | can you download it? |
 | --- | --- | --- |
-| `download` | A verified, public-domain full text. | **Yes** — the CLI fetches the real file. |
+| `download` | A free, legally readable copy of this title. | **Yes**, when the API offers a file. A few sources are free to read but expose no file to fetch — the CLI says so instead of downloading nothing quietly. |
 | `borrow` | A real copy, but borrow-only: a free Internet Archive account and a loan are required. | No. The CLI says so and points you at the loan page. |
 | `unverified` | A catalogue record or a search page. No confirmed free copy of this exact title. | No. The CLI says so. |
 
 The tier is never a guess. For the Internet Archive it comes from the item's
 own metadata (`access-restricted-item` and `lending_identifier`); for Project
-Gutenberg we only claim a download when the ebook id resolves to a real file.
+Gutenberg we only claim a download when the title and the author match a real
+ebook and its id resolves to a real file.
 
 The CLI will not download anything that is not `download`, and it never skips a
 result silently — it tells you why.
@@ -172,9 +173,10 @@ the same title do not overwrite each other.
 
 ### `anyfreebook resolve <title> [--author <name>]`
 
-The authoritative answer for a single title. It checks the author against the
-real record, so a book by one Austen never resolves to a different book that
-merely shares the surname.
+The authoritative answer for a single title. It checks the title and the author
+against the real record, so a book by one Austen never resolves to a different
+book that merely shares the surname — and a request for one title never comes
+back with a different book attached.
 
 ```console
 $ anyfreebook resolve "Pride and Prejudice" --author "Jane Austen"
