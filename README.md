@@ -157,6 +157,7 @@ anyfreebook search "python" --json | jq '.results[] | select(.tier=="download") 
 
 | Option | Default | Meaning |
 | --- | --- | --- |
+| `--author <name>` | — | Resolve this exact title+author instead of searching. Recommended. |
 | `--limit <n>` | 5 | Results to consider. |
 | `--source <name>` | `all` | Same values as `search`. |
 | `--format <fmt>` | best available | `epub` > `pdf` > `txt` > `html`. |
@@ -167,6 +168,19 @@ anyfreebook search "python" --json | jq '.results[] | select(.tier=="download") 
 Downloads are **always** restricted to `tier === "download"`. A `borrow` or
 `unverified` result is reported as refused, with the reason — it is never
 skipped quietly.
+
+A result is only downloaded if its **own title** is the title you asked for.
+The search fans out to sources that match free text, so "Pride and Prejudice"
+also finds real academic papers about prejudice, and one of those can outrank
+the novel and carry a perfectly good PDF. Those are reported and skipped, not
+downloaded as if they were the book.
+
+Pass `--author` when you know it. That resolves one exact title against the
+real record instead of searching, which is both faster and unambiguous:
+
+```bash
+anyfreebook download "Pride and Prejudice" --author "Jane Austen" --format epub
+```
 
 File names are `<title-slug>-<source-id>.<ext>`, so two different books with
 the same title do not overwrite each other.

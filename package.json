@@ -1,6 +1,6 @@
 {
   "name": "anyfreebook-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Search 7 open-access book sources and download only what is verifiably public domain.",
   "type": "module",
   "bin": {

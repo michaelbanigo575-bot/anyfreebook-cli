@@ -57,6 +57,57 @@ export function refusalMessage(result) {
   return `"${title}" has tier "${result?.tier ?? 'unknown'}" — only tier=download results may be downloaded.`;
 }
 
+/** Lowercase, alphanumeric-only, single-spaced. Used to compare titles. */
+function normaliseTitle(value) {
+  return String(value || '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+/**
+ * True when a result's own title is the title that was asked for.
+ *
+ * This matters because the search fans out to sources that match free text.
+ * "Pride and Prejudice" finds real academic papers about prejudice — one
+ * titled "assessing the societal and cultural factors influencing males
+ * pursuing nursing and midwifery" — and those papers are more numerous than
+ * the novel. Downloading the top hits without checking their titles means
+ * fetching whatever happened to rank highest.
+ *
+ * A single word is treated as a keyword and matched anywhere in the title. A
+ * multi-word phrase is treated as a title and must be the title, or the title
+ * followed by a subtitle — "Pride and Prejudice" is the novel, but "Pride and
+ * Prejudice in the air" is a different book that happens to start the same
+ * way.
+ */
+export function titleMatches(query, title) {
+  const want = normaliseTitle(query);
+  const got = normaliseTitle(title);
+  if (!want || !got) return false;
+
+  if (!want.includes(' ')) {
+    const escaped = want.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\b${escaped}\\b`).test(got);
+  }
+
+  if (got === want) return true;
+
+  const rawWant = String(query || '').toLowerCase().trim();
+  const rawGot = String(title || '').toLowerCase().trim();
+  const separator = /^[:\-–—(\[]/;
+
+  // A subtitle or an edition marker may follow the title.
+  if (rawGot.startsWith(rawWant) && separator.test(rawGot.slice(rawWant.length).trimStart())) {
+    return true;
+  }
+  // The request may be more specific than the record's title.
+  if (rawWant.startsWith(rawGot) && separator.test(rawWant.slice(rawGot.length).trimStart())) {
+    return true;
+  }
+  return false;
+}
+
 async function pathExists(target) {
   try {
     await fs.access(target);
@@ -160,13 +211,33 @@ export async function downloadCommand(opts, ctx) {
   const dryRun = Boolean(opts.dryRun);
   const outDir = path.resolve(opts.out || DEFAULT_OUT_DIR);
 
-  const data = await ctx.api.search({ q: query, page: 1, source, limit });
-  const failedSources = Array.isArray(data.failedSources) ? data.failedSources : [];
-  if (data.partial || failedSources.length > 0) {
-    ctx.err.write(`${partialWarning(failedSources, ctx.style)}\n`);
+  const author = typeof opts.author === 'string' ? opts.author.trim() : '';
+
+  // With an author, the resolve endpoint is authoritative: it matches the
+  // title AND the author against the real record, so a search that returns
+  // papers which merely contain the word "prejudice" cannot displace the
+  // novel. Without one, the search hits are filtered to the titles that
+  // actually match, for the same reason.
+  let results = [];
+  let resolvedDirectly = false;
+
+  if (author) {
+    const resolved = await ctx.api.resolve({ title: query, author });
+    if (resolved && resolved.tier === 'download') {
+      results = [resolved];
+      resolvedDirectly = true;
+    }
   }
 
-  const results = Array.isArray(data.results) ? data.results : [];
+  if (!resolvedDirectly) {
+    const data = await ctx.api.search({ q: query, page: 1, source, limit });
+    const failedSources = Array.isArray(data.failedSources) ? data.failedSources : [];
+    if (data.partial || failedSources.length > 0) {
+      ctx.err.write(`${partialWarning(failedSources, ctx.style)}\n`);
+    }
+    results = Array.isArray(data.results) ? data.results : [];
+  }
+
   const items = [];
 
   for (const result of results) {
@@ -184,6 +255,19 @@ export async function downloadCommand(opts, ctx) {
         message: format
           ? `No ${format} file was offered for "${title}".`
           : `The API did not return a downloadable file for "${title}".`,
+      });
+      continue;
+    }
+    // Only download a file when the result is the title that was asked for.
+    // The search fans out to sources that match free text, so "Pride and
+    // Prejudice" also finds real papers about prejudice — and one of those
+    // can outrank the novel and carry a perfectly downloadable PDF.
+    if (!resolvedDirectly && !titleMatches(query, result?.title)) {
+      items.push({
+        status: 'skipped',
+        title,
+        book: result,
+        message: `Not titled "${query}" — not downloading it as if it were the book you asked for.`,
       });
       continue;
     }
