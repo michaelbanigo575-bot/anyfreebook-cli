@@ -92,7 +92,7 @@ export function parseArgs(argv) {
   return opts;
 }
 
-export const GENERAL_HELP = `anyfreebook ${VERSION} — search 7 open-access book sources, download only what is verifiably public domain.
+export const GENERAL_HELP = `anyfreebook ${VERSION} — search 12 open-access book sources, download only what is verifiably public domain.
 
 Usage:
   anyfreebook search <query> [options]
@@ -127,7 +127,8 @@ Archive, Google Books, PubMed Central, DOAJ and LibriVox.
   --limit <n>        Results per page (default 10, max 50)
   --page <n>         Page number (default 1)
   --source <name>    all | gutenberg | openlibrary | archive | googlebooks |
-                     pubmed | doaj | librivox   (default all)
+                     pubmed | doaj | librivox | openalex | wikisource |
+                     europeana | zenodo | otl   (default all)
   --format <fmt>     Keep only results offering epub | pdf | txt | html
   --free-only        Keep only results with a verified free download
 `,
@@ -138,7 +139,8 @@ Download — search, then write verified public-domain books to a folder.
 
   --limit <n>        Results to consider (default 5, max 50)
   --source <name>    all | gutenberg | openlibrary | archive | googlebooks |
-                     pubmed | doaj | librivox   (default all)
+                     pubmed | doaj | librivox | openalex | wikisource |
+                     europeana | zenodo | otl   (default all)
   --format <fmt>     epub | pdf | txt | html (default: best available —
                      epub > pdf > txt > html)
   --out <dir>        Destination folder (default ./books)

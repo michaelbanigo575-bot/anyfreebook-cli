@@ -42,6 +42,11 @@ export const SOURCES = [
   'pubmed',
   'doaj',
   'librivox',
+  'openalex',
+  'wikisource',
+  'europeana',
+  'zenodo',
+  'otl',
 ];
 
 /** File formats the CLI knows how to download. */

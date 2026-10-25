@@ -148,7 +148,7 @@ anyfreebook search "python" --json | jq '.results[] | select(.tier=="download") 
 | --- | --- | --- |
 | `--limit <n>` | 10 | Results per page (max 50). |
 | `--page <n>` | 1 | Page number. |
-| `--source <name>` | `all` | `all`, `gutenberg`, `openlibrary`, `archive`, `googlebooks`, `pubmed`, `doaj`, `librivox`. |
+| `--source <name>` | `all` | `all`, `gutenberg`, `openlibrary`, `archive`, `googlebooks`, `pubmed`, `doaj`, `librivox`, `openalex`, `wikisource`, `europeana`, `zenodo`, `otl`. |
 | `--format <fmt>` | — | Keep only results offering `epub`, `pdf`, `txt` or `html`. |
 | `--free-only` | off | Keep only `tier === "download"` results. |
 | `--json` | off | Print the raw JSON response to stdout and nothing else. |
