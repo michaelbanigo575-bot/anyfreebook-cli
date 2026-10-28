@@ -219,6 +219,29 @@ Uptime     3h 12m
 Base URL   https://anyfreebook.com/api/v1
 ```
 
+### `anyfreebook sources`
+
+Lists every source the API searches, and what a result from each one actually
+means. The tier is the important column: `download` is a file you can fetch
+now, `borrow` is a real lending copy, `unverified` is a catalogue record whose
+licence is not confirmed.
+
+```console
+$ anyfreebook sources
+
+13 sources, and what a result from each one means:
+
+Project Gutenberg — 79,666 ebooks
+  books · tier download · file attached
+  The largest library of public-domain ebooks.
+  https://www.gutenberg.org
+
+Open Library
+  books · tier unverified · no file, links to the source
+  The catalogue layer: what exists, and which edition of it is free.
+  https://openlibrary.org
+```
+
 ### Global options
 
 | Option | Environment variable | Default |
@@ -385,6 +408,30 @@ id; a PDF is listed only when the source reported one.
 { "status": "ok", "apiVersion": "v1", "uptimeSeconds": 1234 }
 ```
 
+### `GET /sources`
+
+The registry of what the API searches. Every entry carries its kind, the tier
+its results produce, and whether a result carries a file.
+
+```json
+{
+  "apiVersion": "v1",
+  "generatedAt": "2026-10-23T23:30:00.000Z",
+  "sources": [
+    {
+      "id": "gutenberg",
+      "label": "Project Gutenberg",
+      "kind": "books",
+      "tier": "download",
+      "providesFiles": true,
+      "catalogueSize": "79,666 ebooks",
+      "licence": "Public domain in the United States",
+      "homepage": "https://www.gutenberg.org"
+    }
+  ]
+}
+```
+
 ### Authentication
 
 Optional. The anonymous tier works with no setup — send a key only if you
@@ -423,10 +470,14 @@ allowlist.
 ## Sources
 
 Project Gutenberg · Open Library · Internet Archive · Google Books ·
-PubMed Central · DOAJ · LibriVox
+PubMed Central · DOAJ · LibriVox · OpenAlex · Wikisource · Europeana ·
+Zenodo · Open Textbook Library
 
 Google Books records are catalogue entries, not free copies, and are reported
 as `unverified` for exactly that reason.
+
+`anyfreebook sources` prints this list with each source's tier and licence,
+straight from the API, so it cannot drift from what the API actually does.
 
 ---
 

@@ -99,6 +99,11 @@ export class ApiClient {
     return this.request('health');
   }
 
+  /** GET /sources — the registry of what the API searches. */
+  async sources() {
+    return this.request('sources');
+  }
+
   #networkFailure(err, url) {
     const name = err && err.name ? err.name : '';
     if (name === 'TimeoutError' || name === 'AbortError') {

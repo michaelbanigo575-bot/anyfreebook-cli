@@ -146,3 +146,20 @@ test('health prints the API status', async () => {
   assert.equal(result.code, 0);
   assert.match(result.stdout, /ok/);
 });
+
+test('sources lists every source with its tier', async () => {
+  const result = await run(['sources', '--api-base', base]);
+  assert.equal(result.code, 0);
+  assert.match(result.stdout, /Project Gutenberg/);
+  assert.match(result.stdout, /download/);
+  assert.match(result.stdout, /unverified/);
+  assert.match(result.stdout, /file attached/);
+});
+
+test('sources --json emits valid JSON only on stdout', async () => {
+  const result = await run(['sources', '--api-base', base, '--json']);
+  assert.equal(result.code, 0);
+  const payload = JSON.parse(result.stdout);
+  assert.ok(Array.isArray(payload.sources));
+  assert.equal(payload.sources[0].id, 'gutenberg');
+});

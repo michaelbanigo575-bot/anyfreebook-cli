@@ -158,6 +158,37 @@ export function startMockApi({ port = 0 } = {}) {
       return;
     }
 
+    if (pathname === '/api/v1/sources') {
+      json(response, 200, {
+        apiVersion: 'v1',
+        generatedAt: NOW,
+        sources: [
+          {
+            id: 'gutenberg',
+            label: 'Project Gutenberg',
+            kind: 'books',
+            description: 'The largest library of public-domain ebooks.',
+            homepage: 'https://www.gutenberg.org',
+            tier: 'download',
+            providesFiles: true,
+            catalogueSize: '79,666 ebooks',
+            licence: 'Public domain in the United States',
+          },
+          {
+            id: 'openlibrary',
+            label: 'Open Library',
+            kind: 'books',
+            description: 'The catalogue layer: what exists, and which edition of it is free.',
+            homepage: 'https://openlibrary.org',
+            tier: 'unverified',
+            providesFiles: false,
+            licence: 'Varies by edition',
+          },
+        ],
+      });
+      return;
+    }
+
     if (pathname === '/api/v1/search') {
       const query = url.searchParams.get('q') || '';
       const lower = query.toLowerCase();

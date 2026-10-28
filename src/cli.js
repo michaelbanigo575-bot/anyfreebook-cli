@@ -13,12 +13,14 @@ import { downloadCommand } from './commands/download.js';
 import { healthCommand } from './commands/health.js';
 import { resolveCommand } from './commands/resolve.js';
 import { searchCommand } from './commands/search.js';
+import { sourcesCommand } from './commands/sources.js';
 
 const COMMANDS = {
   search: searchCommand,
   download: downloadCommand,
   resolve: resolveCommand,
   health: healthCommand,
+  sources: sourcesCommand,
 };
 
 const VALUE_OPTIONS = new Set([
@@ -99,6 +101,7 @@ Usage:
   anyfreebook download <query> [options]
   anyfreebook resolve <title> [--author <name>] [options]
   anyfreebook health [options]
+  anyfreebook sources [options]
 
 Global options:
   --api-base <url>    API base URL            (env ANYFREEBOOK_API_BASE)
@@ -160,6 +163,14 @@ Resolve — the authoritative legal status of one title.
 Health — check that the API is reachable.
 
   anyfreebook health [options]
+`,
+  sources: `
+Sources — what the API searches, and what a result from each one means.
+
+  anyfreebook sources [options]
+
+  Prints each source with its kind, its tier (download | borrow | unverified)
+  and whether a result from it carries a file you can fetch.
 `,
 };
 
